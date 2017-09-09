@@ -4,10 +4,7 @@ import ru.spbau.nikiforovskaya.util.HashTable;
 
 /**
  * An Example class shows basic possibilities of HashTable
- *
- * @author Anna Nikiforovskaya
  */
-
 public class Example {
     public static void main(String[] args) {
         HashTable ht = new HashTable();

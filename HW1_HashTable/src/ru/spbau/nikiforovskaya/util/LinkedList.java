@@ -3,23 +3,40 @@ package ru.spbau.nikiforovskaya.util;
 /**
  * A singly linked list to be used into HashTable,
  * which stores a pair of key and value.
- *
- * @author Anna Nikiforovskaya
  */
-
 public class LinkedList {
 
     private Node head;
     private Node tail;
 
-    private int size;
+    /**
+     * A list consists of nodes.
+     * Node can be used to iterate over List
+     */
+    public class Node {
+        private Node next;
+        private Pair data;
 
-    private class Node {
-        public Node next;
-        public Pair data;
-
-        public Node(Pair data) {
+        private Node(Pair data) {
             this.data = data;
+        }
+
+        /**
+         * Get next node in the list.
+         *
+         * @return Next node.
+         */
+        public Node getNext() {
+            return next;
+        }
+
+        /**
+         * Get data stored in the node.
+         *
+         * @return Pair of key and value.
+         */
+        public Pair getData() {
+            return data;
         }
     }
 
@@ -28,7 +45,6 @@ public class LinkedList {
      *
      * @return a head of the list
      */
-
     public Node getHead() {
         return head;
     }
@@ -39,17 +55,14 @@ public class LinkedList {
      * @param key   A String which you want to store value at
      * @param value A String which is a value, stored by the key
      */
-
     public void add(String key, String value) {
         if (head == null) {
             head = new Node(new Pair(key, value));
             tail = head;
-            size++;
             return;
         }
         tail.next = new Node(new Pair(key, value));
         tail = tail.next;
-        size++;
     }
 
     /**
@@ -58,12 +71,10 @@ public class LinkedList {
      * @param key A String which pair you want to return
      * @return <code>Pair</code> if there is a such element, <code>null</code> otherwise
      */
-
-
     public Pair get(String key) {
-        for (Node cur = head; cur != null; cur = cur.next) {
-            if (cur.data.getKey().equals(key)) {
-                return cur.data;
+        for (Node current = head; current != null; current = current.next) {
+            if (current.data.getKey().equals(key)) {
+                return current.data;
             }
         }
         return null;
@@ -76,7 +87,6 @@ public class LinkedList {
      * @return <code>Pair</code> which has been removed or
      * <code>null</code> if there was no such pair
      */
-
     public Pair remove(String key) {
         if (head == null) {
             return null;
@@ -85,14 +95,12 @@ public class LinkedList {
         if (head.data.getKey().equals(key)) {
             Pair removed = head.data;
             head = head.next;
-            size--;
             return removed;
         }
-        for (Node cur = head; cur.next != null; cur = cur.next) {
-            if (cur.next.data.getKey().equals(key)) {
-                Pair removed = cur.next.data;
-                cur.next = cur.next.next;
-                size--;
+        for (Node current = head; current.next != null; current = current.next) {
+            if (current.next.data.getKey().equals(key)) {
+                Pair removed = current.next.data;
+                current.next = current.next.next;
                 return removed;
             }
         }
@@ -105,40 +113,21 @@ public class LinkedList {
      * @param key A key string you want to check.
      * @return <code>true</code> if the list contains such key, <code>false</code> otherwise.
      */
-
     public boolean contains(String key) {
-        for (Node cur = head; cur != null; cur = cur.next) {
-            if (cur.data.getKey().equals(key)) {
+        for (Node current = head; current != null; current = current.next) {
+            if (current.data.getKey().equals(key)) {
                 return true;
             }
         }
         return false;
     }
 
-    /**
-     * Converts the list to an array of pairs of key and value
-     *
-     * @return Array of all Pairs which are in the list
-     */
-
-
-    public Pair[] toArray() {
-        Pair[] temp = new Pair[size];
-        int ind = 0;
-
-        for (Node cur = head; cur != null; cur = cur.next) {
-            temp[ind++] = cur.data;
-        }
-        return temp;
-    }
 
     /**
      * Clears the list
      */
-
     public void clear() {
         head = null;
         tail = null;
-        size = 0;
     }
 }
