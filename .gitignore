@@ -7,6 +7,10 @@
 # Log file
 *.log
 
+# Intellij Idea files
+workspace.xml
+tasks.xml
+
 # BlueJ files
 *.ctxt
 
