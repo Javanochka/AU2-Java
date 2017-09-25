@@ -11,12 +11,18 @@ class HashTableTest {
 
     private HashTable ht;
 
+    private class HashTableStupidHash extends HashTable {
+        protected int getHash(String s) {
+            return 0;
+        }
+    }
+
     @BeforeEach
     void setUp() {
         ht = new HashTable();
     }
 
-    private void fillHashTableWithManyElements() {
+    private static void fillHashTableWithManyElements(HashTable ht) {
         for (int i = 0; i < 10; i++) {
             ht.put(Integer.toString(i), Character.toString((char)(i + 'a')));
         }
@@ -35,7 +41,14 @@ class HashTableTest {
 
     @Test
     void testSizeDifferentKeys() {
-        fillHashTableWithManyElements();
+        fillHashTableWithManyElements(ht);
+        assertEquals(10, ht.size());
+    }
+
+    @Test
+    void testSizeManyKeysBadHasher() {
+        ht = new HashTableStupidHash();
+        fillHashTableWithManyElements(ht);
         assertEquals(10, ht.size());
     }
 
@@ -67,7 +80,15 @@ class HashTableTest {
 
     @Test
     void testContainsManyElements() {
-        fillHashTableWithManyElements();
+        fillHashTableWithManyElements(ht);
+        assertTrue(ht.contains("5"));
+        assertFalse(ht.contains("a"));
+    }
+
+    @Test
+    void testContainsManyElementsBadHasher() {
+        ht = new HashTableStupidHash();
+        fillHashTableWithManyElements(ht);
         assertTrue(ht.contains("5"));
         assertFalse(ht.contains("a"));
     }
@@ -85,7 +106,17 @@ class HashTableTest {
 
     @Test
     void testGetManyDifferentKeys() {
-        fillHashTableWithManyElements();
+        fillHashTableWithManyElements(ht);
+        for (int i = 0; i < 10; i++) {
+            assertEquals(Character.toString((char)(i + 'a')), ht.get(Integer.toString(i)));
+        }
+        assertEquals(10, ht.size());
+    }
+
+    @Test
+    void testGetManyKeysBadHasher() {
+        ht = new HashTableStupidHash();
+        fillHashTableWithManyElements(ht);
         for (int i = 0; i < 10; i++) {
             assertEquals(Character.toString((char)(i + 'a')), ht.get(Integer.toString(i)));
         }
@@ -112,6 +143,13 @@ class HashTableTest {
     }
 
     @Test
+    void testPutAfterDifferentBadHasher() {
+        ht = new HashTableStupidHash();
+        ht.put("key", "value");
+        assertEquals(null, ht.put("hey", "way"));
+    }
+
+    @Test
     void testPutAfterSame() {
         ht.put("key", "value");
         assertEquals("value", ht.put("key", "another"));
@@ -133,7 +171,15 @@ class HashTableTest {
 
     @Test
     void testRemoveMany() {
-        fillHashTableWithManyElements();
+        fillHashTableWithManyElements(ht);
+        assertEquals("f", ht.remove("5"));
+        assertEquals(9, ht.size());
+    }
+
+    @Test
+    void testRemoveManyBadHasher() {
+        ht = new HashTableStupidHash();
+        fillHashTableWithManyElements(ht);
         assertEquals("f", ht.remove("5"));
         assertEquals(9, ht.size());
     }
@@ -152,7 +198,16 @@ class HashTableTest {
 
     @Test
     void testClearMany() {
-        fillHashTableWithManyElements();
+        fillHashTableWithManyElements(ht);
+        ht.clear();
+        assertFalse(ht.contains("5"));
+        assertEquals(0, ht.size());
+    }
+
+    @Test
+    void testClearManyBadHasher() {
+        ht = new HashTableStupidHash();
+        fillHashTableWithManyElements(ht);
         ht.clear();
         assertFalse(ht.contains("5"));
         assertEquals(0, ht.size());

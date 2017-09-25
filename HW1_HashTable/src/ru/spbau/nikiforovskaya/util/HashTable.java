@@ -29,7 +29,7 @@ public class HashTable {
         return size;
     }
 
-    private int getHash(String s) {
+    protected int getHash(String s) {
         long hash = 0;
         for (int i = 0; i < s.length(); i++) {
             hash = hash * HASH_PRIME + s.charAt(i);
