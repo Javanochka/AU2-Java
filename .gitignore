@@ -11,6 +11,11 @@
 workspace.xml
 tasks.xml
 
+# Gradle files:
+.gradle
+build/
+gradlew.bat
+
 # BlueJ files
 *.ctxt
 
