@@ -19,8 +19,8 @@ public class HashMap<K, V> implements Map<K,V> {
     private int capacity;
 
     private static final int BASE_CAPACITY = 4;
-    private static final int HASH_PRIME = 37;
 
+    /** Creates a HashTable, base capacity is 4 */
     public HashMap() {
         capacity = BASE_CAPACITY;
         data = (LinkedList<K, V>[])new LinkedList[capacity];
@@ -69,6 +69,16 @@ public class HashMap<K, V> implements Map<K,V> {
 
     @Override
     public boolean containsValue(Object value) {
+        for (LinkedList<K, V> list : data) {
+            if (list == null) {
+                continue;
+            }
+            for (LinkedList<K,V>.Node i = list.getHead(); i != null; i = i.getNext()) {
+                if (i.getData().getValue().equals(value)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
