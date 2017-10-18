@@ -1,83 +1,83 @@
 package ru.spbau.nikiforovskaya.util;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class SetTest {
+class SetTest {
 
 
     Set<Integer> intSet;
     Set<String> stringSet;
     Random r;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         intSet = new Set<>();
         stringSet = new Set<>();
         r = new Random(5);
     }
 
     @Test
-    public void testAddIntOnly() {
+    void testAddIntOnly() {
         intSet.add(1);
         assertArrayEquals(new Integer[]{1}, intSet.toArrayList().toArray());
     }
 
     @Test
-    public void testAddStringOnly() {
+    void testAddStringOnly() {
         stringSet.add("aba");
         assertArrayEquals(new String[]{"aba"}, stringSet.toArrayList().toArray());
     }
 
     @Test
-    public void testAddIntDuplicates() {
+    void testAddIntDuplicates() {
         intSet.add(1);
         intSet.add(1);
         assertArrayEquals(new Integer[]{1}, intSet.toArrayList().toArray());
     }
 
     @Test
-    public void testAddStringDuplicates() {
+    void testAddStringDuplicates() {
         stringSet.add("aba");
         stringSet.add("aba");
         assertArrayEquals(new String[]{"aba"}, stringSet.toArrayList().toArray());
     }
 
     @Test
-    public void testAddIntDifferent() {
+    void testAddIntDifferent() {
         intSet.add(1);
         intSet.add(2);
         assertArrayEquals(new Integer[]{1, 2}, intSet.toArrayList().toArray());
     }
 
     @Test
-    public void testAddStringDifferent() {
+    void testAddStringDifferent() {
         stringSet.add("aba");
         stringSet.add("acd");
         assertArrayEquals(new String[]{"aba", "acd"}, stringSet.toArrayList().toArray());
     }
 
     @Test
-    public void testContainsIntOnly() {
+    void testContainsIntOnly() {
         intSet.add(1);
         assertTrue(intSet.contains(1));
         assertFalse(intSet.contains(3));
     }
 
     @Test
-    public void testContainsStringOnly() {
+    void testContainsStringOnly() {
         stringSet.add("aba");
         assertTrue(stringSet.contains("aba"));
         assertFalse(stringSet.contains("other"));
     }
 
     @Test
-    public void testContainsIntDifferent() {
+    void testContainsIntDifferent() {
         intSet.add(1);
         intSet.add(2);
         assertTrue(intSet.contains(1));
@@ -86,7 +86,7 @@ public class SetTest {
     }
 
     @Test
-    public void testContainsStringDifferent() {
+    void testContainsStringDifferent() {
         stringSet.add("aba");
         stringSet.add("acd");
         assertTrue(stringSet.contains("aba"));
@@ -95,57 +95,57 @@ public class SetTest {
     }
 
     @Test
-    public void testSizeIntEmpty() {
+    void testSizeIntEmpty() {
         assertEquals(0, intSet.size());
     }
 
     @Test
-    public void testSizeStringEmpty() {
+    void testSizeStringEmpty() {
         assertEquals(0, stringSet.size());
     }
 
     @Test
-    public void testSizeIntOnly() {
+    void testSizeIntOnly() {
         intSet.add(1);
         assertEquals(1, intSet.size());
     }
 
     @Test
-    public void testSizeStringOnly() {
+    void testSizeStringOnly() {
         stringSet.add("aba");
         assertEquals(1, stringSet.size());
     }
 
     @Test
-    public void testSizeIntDuplicates() {
+    void testSizeIntDuplicates() {
         intSet.add(1);
         intSet.add(1);
         assertEquals(1, intSet.size());
     }
 
     @Test
-    public void testSizeStringDuplicates() {
+    void testSizeStringDuplicates() {
         stringSet.add("aba");
         stringSet.add("aba");
         assertEquals(1, stringSet.size());
     }
 
     @Test
-    public void testSizeIntDifferent() {
+    void testSizeIntDifferent() {
         intSet.add(1);
         intSet.add(2);
         assertEquals(2, intSet.size());
     }
 
     @Test
-    public void testSizeStringDifferent() {
+    void testSizeStringDifferent() {
         stringSet.add("aba");
         stringSet.add("acd");
         assertEquals(2, stringSet.size());
     }
 
     @Test
-    public void testToArrayListInt() {
+    void testToArrayListInt() {
         TreeSet<Integer> res = new TreeSet<>();
         for (int i = 0; i < 10; i++) {
             int t = r.nextInt(10);
@@ -156,7 +156,7 @@ public class SetTest {
     }
 
     @Test
-    public void testToArrayListString() {
+    void testToArrayListString() {
         TreeSet<String> res = new TreeSet<>();
         for (int i = 0; i < 10; i++) {
             int t = r.nextInt(10);
