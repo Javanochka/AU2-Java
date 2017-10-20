@@ -17,7 +17,7 @@ public class Trie implements Serializable {
     private class Node implements Serializable {
         private HashMap<Character, Node> go = new HashMap<>();
         private boolean isTerminal;
-        private int sufNumber;
+        private int suffixNumber;
 
         private Node move(char symbol) {
             if (!go.containsKey(symbol)) {
@@ -34,6 +34,7 @@ public class Trie implements Serializable {
     /**
      * Adds a new string element into the trie.
      * Does nothing, if there such string exists.
+     * Requires linear time in the element's length.
      * @param element a string to add into the trie
      * @return {@code true}, if added a new element, {@code false} otherwise.
      */
@@ -44,16 +45,17 @@ public class Trie implements Serializable {
 
         Node current = root;
         for (int i = 0; i < element.length(); i++) {
-            current.sufNumber++;
+            current.suffixNumber++;
             current = current.move(element.charAt(i));
         }
-        current.sufNumber++;
+        current.suffixNumber++;
         current.isTerminal = true;
         return true;
     }
 
     /**
-     *Checks if there exists such string in the trie.
+     * Checks if there exists such string in the trie.
+     * Requires linear time in the element's length.
      * @param element a string to check
      * @return {@code true} if there exists such string, {@code false} otherwise.
      */
@@ -70,6 +72,7 @@ public class Trie implements Serializable {
 
     /**
      * Removes a string from the trie.
+     * Requires linear time in the element's length.
      * @param element a string to remove
      * @return {@code true} if there was such element, {@code false} otherwise.
      */
@@ -79,10 +82,10 @@ public class Trie implements Serializable {
         }
         Node current = root;
         for (int i = 0; i < element.length(); i++) {
-            current.sufNumber--;
+            current.suffixNumber--;
             current = current.move(element.charAt(i));
         }
-        current.sufNumber--;
+        current.suffixNumber--;
         current.isTerminal = false;
         return true;
     }
@@ -92,11 +95,12 @@ public class Trie implements Serializable {
      * @return a number of strings in the trie.
      */
     public int size() {
-        return root.sufNumber;
+        return root.suffixNumber;
     }
 
     /**
      * Returns a number of strings which start with the specified prefix.
+     * Requires linear time in the prefix's length.
      * @param prefix a string of which to count number of suffixes
      * @return a number of strings which start with the specified prefix.
      */
@@ -105,13 +109,13 @@ public class Trie implements Serializable {
         for (int i = 0; i < prefix.length(); i++) {
             current = current.move(prefix.charAt(i));
         }
-        return current.sufNumber;
+        return current.suffixNumber;
     }
 
     /**
      * Writes a trie into the output stream.
      * @param out an output stream to write into
-     * @throws IOException
+     * @throws IOException if couldn't write properly to the given output stream.
      */
     public void serialize(OutputStream out) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(out);
@@ -122,8 +126,8 @@ public class Trie implements Serializable {
     /**
      * Reads a trie from the input stream.
      * @param in an input stream to read from
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IOException if couldn't read properly to the given output stream.
+     * @throws ClassNotFoundException if tries to read something which is not a Trie.
      */
     public void deserialize(InputStream in) throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(in);
