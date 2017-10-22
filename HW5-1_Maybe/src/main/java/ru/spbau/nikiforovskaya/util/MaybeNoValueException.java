@@ -4,12 +4,12 @@ package ru.spbau.nikiforovskaya.util;
  * MaybeException, which is thrown when
  * you try to use non existing object in Maybe.
  */
-public class MaybeException extends Exception {
+public class MaybeNoValueException extends Exception {
 
-    public MaybeException() {}
+    public MaybeNoValueException() {}
 
     // Constructor that accepts a message
-    public MaybeException(String message)
+    public MaybeNoValueException(String message)
     {
         super(message);
     }

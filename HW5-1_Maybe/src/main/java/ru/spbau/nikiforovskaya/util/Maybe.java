@@ -22,7 +22,7 @@ public class Maybe<T> {
      * @return a new Maybe object.
      */
     public static <U> Maybe<U> just(U t) {
-        return new Maybe<U>(t);
+        return new Maybe<>(t);
     }
 
     /**
@@ -31,17 +31,17 @@ public class Maybe<T> {
      * @return a new Maybe object, containing nothing.
      */
     public static <U> Maybe<U> nothing() {
-        return new Maybe<U>(null);
+        return new Maybe<>(null);
     }
 
     /**
      * Returns an object stored inside, if it exists.
      * @return an object stored inside, if it exists
-     * @throws MaybeException if a wrapper contains nothing.
+     * @throws MaybeNoValueException if a wrapper contains nothing.
      */
-    public T get() throws MaybeException {
+    public T get() throws MaybeNoValueException {
         if (data == null) {
-            throw new MaybeException("No value stored in Maybe");
+            throw new MaybeNoValueException("No value stored in Maybe");
         }
         return data;
     }
@@ -64,6 +64,6 @@ public class Maybe<T> {
         if (data == null) {
             return nothing();
         }
-        return new Maybe<T>(mapper.apply(data));
+        return new Maybe<>(mapper.apply(data));
     }
 }
