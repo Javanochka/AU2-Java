@@ -3,11 +3,13 @@ package ru.spbau.nikiforovskaya.util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MyTreeSetTest {
+class BinarySearchTreeTest {
 
     private class Pair {
         int x;
@@ -33,25 +35,18 @@ class MyTreeSetTest {
         }
     }
 
-    private MyTreeSet<Integer> intSet;
-    private MyTreeSet<Pair> pairSet;
+    private BinarySearchTree<Integer> intSet;
+    private BinarySearchTree<Pair> pairSet;
 
     @BeforeEach
     void setUp() {
-        intSet = new MyTreeSet<>();
-        pairSet = new MyTreeSet<>((o1, o2) -> {
+        intSet = new BinarySearchTree<>(Integer::compareTo);
+        pairSet = new BinarySearchTree<>((o1, o2) -> {
             if (o1.x == o2.x) {
                 return Integer.compare(o1.y, o2.y);
             }
             return Integer.compare(o1.x, o2.x);
         });
-    }
-
-    @Test
-    void testAddPairSetNoConstructor() {
-        pairSet = new MyTreeSet<>();
-        assertTrue(pairSet.add(new Pair(2, 3)));
-        assertThrows(ClassCastException.class, ()->pairSet.add(new Pair(1, 5)));
     }
 
     @Test
@@ -227,22 +222,6 @@ class MyTreeSetTest {
     }
 
     @Test
-    void testIteratorEmptyIntSet() {
-        ArrayList<Integer> inside = new ArrayList<>();
-        inside.addAll(intSet);
-        assertArrayEquals(new Integer[] {}, inside.toArray());
-    }
-
-    @Test
-    void testIteratorSeveralIntSet() {
-        intSet.addAll(Arrays.asList(4, 8, 1, 9, 10, 2, 3, 6, 5, 7));
-        ArrayList<Integer> inside = new ArrayList<>();
-        inside.addAll(intSet);
-        assertArrayEquals(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-                inside.toArray());
-    }
-
-    @Test
     void testSizeEmptyPairSet() {
         assertEquals(0, pairSet.size());
     }
@@ -294,59 +273,6 @@ class MyTreeSetTest {
     }
 
     @Test
-    void testDescendingIteratorSeveralIntSet() {
-        intSet.addAll(Arrays.asList(2, 1, 3));
-        Iterator<Integer> it = intSet.descendingIterator();
-        assertEquals(Integer.valueOf(3), it.next());
-        assertEquals(Integer.valueOf(2), it.next());
-        assertEquals(Integer.valueOf(1), it.next());
-    }
-
-    @Test
-    void testDescendingIteratorManyIntSet() {
-        intSet.addAll(Arrays.asList(4, 8, 1, 9, 10, 2, 3, 6, 5, 7));
-        Iterator<Integer> it = intSet.descendingIterator();
-        ArrayList<Integer> result = new ArrayList<>();
-        while(it.hasNext()) {
-            int p = it.next();
-            result.add(p);
-        }
-        assertArrayEquals(new Integer[] {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
-                result.toArray());
-    }
-
-    @Test
-    void testDescendingSetOnlyElementPairSet() {
-        pairSet.add(new Pair(2, 3));
-        ru.spbau.litvinov.MyTreeSet<Pair> dPairSet = pairSet.descendingSet();
-        assertArrayEquals(new Pair[] {new Pair(2, 3)}, dPairSet.toArray());
-    }
-
-    @Test
-    void testDescendingSetSeveralAddsIntSet() {
-        intSet.addAll(Arrays.asList(4, 1, 3, 2));
-        ru.spbau.litvinov.MyTreeSet<Integer> dIntSet = intSet.descendingSet();
-        assertArrayEquals(new Integer[] {4, 3, 2, 1}, dIntSet.toArray());
-    }
-
-    @Test
-    void testDescendingSetAddsAfterCreateIntSet() {
-        intSet.addAll(Arrays.asList(4, 1, 3, 2));
-        ru.spbau.litvinov.MyTreeSet<Integer> dIntSet = intSet.descendingSet();
-        assertTrue(dIntSet.add(5));
-        assertFalse(dIntSet.add(2));
-        assertArrayEquals(new Integer[] {5, 4, 3, 2, 1}, dIntSet.toArray());
-    }
-
-    @Test
-    void testDescendingSetRemoveAfterCreateIntSet() {
-        intSet.addAll(Arrays.asList(4, 1, 3, 2));
-        ru.spbau.litvinov.MyTreeSet<Integer> dIntSet = intSet.descendingSet();
-        assertTrue(dIntSet.remove(3));
-        assertArrayEquals(new Integer[] {4, 2, 1}, dIntSet.toArray());
-    }
-
-    @Test
     void testFirstEmptyPairSet() {
         assertNull(pairSet.first());
     }
@@ -355,19 +281,6 @@ class MyTreeSetTest {
     void testFirstTheOnlyPairSet() {
         pairSet.add(new Pair(2, 3));
         assertEquals(new Pair(2, 3), pairSet.first());
-    }
-
-    @Test
-    void testFirstSeveralIntSet() {
-        intSet.addAll(Arrays.asList(2, 4, 1, 3));
-        assertEquals(Integer.valueOf(1), intSet.first());
-    }
-
-    @Test
-    void testFirstSeveralAfterRemoveIntSet() {
-        intSet.addAll(Arrays.asList(2, 4, 1, 3));
-        intSet.remove(1);
-        assertEquals(Integer.valueOf(2), intSet.first());
     }
 
     @Test
@@ -382,41 +295,16 @@ class MyTreeSetTest {
     }
 
     @Test
-    void testLastSeveralIntSet() {
-        intSet.addAll(Arrays.asList(2, 4, 1, 3));
-        assertEquals(Integer.valueOf(4), intSet.last());
-    }
-
-    @Test
-    void testLastSeveralAfterRemoveIntSet() {
-        intSet.addAll(Arrays.asList(2, 4, 1, 3));
-        intSet.remove(4);
-        assertEquals(Integer.valueOf(3), intSet.last());
-    }
-
-    @Test
     void testLowerEmptyIntSet() {
         assertNull(intSet.lower(5));
     }
 
     @Test
     void testLowerSeveralIntSet() {
-        intSet.addAll(Arrays.asList(3, 1, 2));
-        assertEquals(Integer.valueOf(1), intSet.lower(2));
-    }
-
-    @Test
-    void testLowerNoSuchElementIntSet() {
-        intSet.addAll(Arrays.asList(3, 1));
-        assertEquals(Integer.valueOf(1), intSet.lower(2));
-    }
-
-    @Test
-    void testLowerManyIntSet() {
-        intSet.addAll(Arrays.asList(4, 8, 1, 9, 10, 2, 3, 6, 5, 7));
-        assertEquals(Integer.valueOf(3), intSet.lower(4));
-        assertNull(intSet.lower(1));
-        assertEquals(Integer.valueOf(6), intSet.lower(7));
+        intSet.add(6);
+        intSet.add(2);
+        intSet.add(3);
+        assertEquals(Integer.valueOf(3), intSet.lower(5));
     }
 
     @Test
@@ -426,23 +314,10 @@ class MyTreeSetTest {
 
     @Test
     void testFloorSeveralIntSet() {
-        intSet.addAll(Arrays.asList(3, 1, 2));
-        assertEquals(Integer.valueOf(2), intSet.floor(2));
-    }
-
-    @Test
-    void testFloorNoSuchElementIntSet() {
-        intSet.addAll(Arrays.asList(3, 1));
-        assertEquals(Integer.valueOf(1), intSet.floor(2));
-    }
-
-    @Test
-    void testFloorManyIntSet() {
-        intSet.addAll(Arrays.asList(4, 8, 1, 9, 10, 2, 3, 6, 5, 7));
-        assertEquals(Integer.valueOf(4), intSet.floor(4));
-        assertNull(intSet.floor(0));
-        assertEquals(Integer.valueOf(7), intSet.floor(7));
-        assertEquals(Integer.valueOf(10), intSet.floor(11));
+        intSet.add(6);
+        intSet.add(2);
+        intSet.add(3);
+        assertEquals(Integer.valueOf(3), intSet.floor(3));
     }
 
     @Test
@@ -452,47 +327,22 @@ class MyTreeSetTest {
 
     @Test
     void testCeilingSeveralIntSet() {
-        intSet.addAll(Arrays.asList(3, 1, 2));
-        assertEquals(Integer.valueOf(2), intSet.ceiling(2));
+        intSet.add(6);
+        intSet.add(2);
+        intSet.add(3);
+        assertEquals(Integer.valueOf(6), intSet.ceiling(5));
     }
 
     @Test
-    void testCeilingNoSuchElementIntSet() {
-        intSet.addAll(Arrays.asList(3, 1));
-        assertEquals(Integer.valueOf(3), intSet.ceiling(2));
-    }
-
-    @Test
-    void testCeilingManyIntSet() {
-        intSet.addAll(Arrays.asList(4, 8, 1, 9, 10, 2, 3, 6, 5, 7));
-        assertEquals(Integer.valueOf(4), intSet.ceiling(4));
-        assertNull(intSet.ceiling(11));
-        assertEquals(Integer.valueOf(7), intSet.ceiling(7));
-        assertEquals(Integer.valueOf(1), intSet.ceiling(0));
-    }
-
-    @Test
-    void testHigherEmptyPairSet() {
+    void testHigherEmptyIntSet() {
         assertNull(intSet.higher(5));
     }
 
     @Test
     void testHigherSeveralIntSet() {
-        intSet.addAll(Arrays.asList(3, 1, 2));
-        assertEquals(Integer.valueOf(3), intSet.higher(2));
-    }
-
-    @Test
-    void testHigherNoSuchElementIntSet() {
-        intSet.addAll(Arrays.asList(3, 1));
-        assertEquals(Integer.valueOf(3), intSet.higher(2));
-    }
-
-    @Test
-    void testHigherManyIntSet() {
-        intSet.addAll(Arrays.asList(4, 8, 1, 9, 10, 2, 3, 6, 5, 7));
-        assertEquals(Integer.valueOf(5), intSet.higher(4));
-        assertNull(intSet.higher(10));
-        assertEquals(Integer.valueOf(8), intSet.higher(7));
+        intSet.add(6);
+        intSet.add(2);
+        intSet.add(3);
+        assertEquals(Integer.valueOf(6), intSet.higher(3));
     }
 }
