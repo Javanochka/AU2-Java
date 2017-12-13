@@ -52,4 +52,23 @@ class InjectorTest {
                 new Class[] {ClassWithOneClassDependency.class}
         ));
     }
+
+    @Test
+    void injectorClassWithOneInterfaceDependencyManyImplementations()
+            throws Exception {
+
+        assertThrows(AmbiguousImplementationException.class, () -> Injector.initialize(
+                "ru.spbau.nikiforovskaya.examples.ClassWithOneInterfaceDependency",
+                new Class[] {InterfaceImpl.class, ClassWithOneInterfaceDependency.class,
+                        Interface.class, InterfaceImplAnother.class}
+        ));
+    }
+
+    @Test
+    void injectorCyclicDependenceException() throws Exception {
+
+        assertThrows(InjectionCycleException.class, () -> Injector.initialize(
+                "ru.spbau.nikiforovskaya.examples.CyclicA",
+                new Class[] {CyclicA.class, CyclicB.class}));
+    }
 }
