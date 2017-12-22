@@ -15,7 +15,7 @@ tasks.xml
 .gradle
 build/
 gradlew.bat
-.idea/libraries/
+**/.idea/libraries/
 
 # BlueJ files
 *.ctxt
