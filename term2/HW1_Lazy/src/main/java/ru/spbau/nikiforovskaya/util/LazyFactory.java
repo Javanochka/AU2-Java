@@ -40,7 +40,7 @@ public class LazyFactory {
         return new Lazy<T>() {
 
             private T result = null;
-            private Supplier<T> produce = supplier;
+            volatile private Supplier<T> produce = supplier;
 
             @Override
             public T get() {
