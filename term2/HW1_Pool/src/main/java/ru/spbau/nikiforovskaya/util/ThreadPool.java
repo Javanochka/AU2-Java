@@ -41,14 +41,6 @@ public class ThreadPool<T> {
         return taskWrapper;
     }
 
-    /**
-     * Checks if the pool of tasks is empty right now.
-     * @return {@code true} if there are no tasks in queue, {@code false} otherwise.
-     */
-    public boolean checkAllTasksDone() {
-        return taskQueue.isEmpty();
-    }
-
     /** Says to interrupt all the threads */
     public void shutdown() {
         for (Thread thread : threads) {

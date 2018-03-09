@@ -100,7 +100,7 @@ class ThreadPoolTest {
     }
 
     @Test
-    void testManyTasksManyAsksManyThreads() throws LightFuture.LightExecutionException {
+    void testManyTasksManyAsksManyThreads() throws LightFuture.LightExecutionException, InterruptedException {
         ThreadPool<Integer> pool = new ThreadPool<>(10);
         int[] number = new int[1000];
         for (int i = 0; i < 1000; i++) {
@@ -108,9 +108,7 @@ class ThreadPoolTest {
             pool.addTask(() -> ++number[j]);
         }
 
-        while (!pool.checkAllTasksDone()) {
-            Thread.yield();
-        }
+        Thread.sleep(1000);
 
         for (int i = 0; i < 1000; i++) {
             assertEquals(1, number[i]);
@@ -119,12 +117,8 @@ class ThreadPoolTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void testShutdown() throws NoSuchFieldException, IllegalAccessException {
-        Supplier<Integer> job = () -> {
-            while (true) {
-                Thread.yield();
-            }
-        };
+    void testShutdown() throws NoSuchFieldException, IllegalAccessException, InterruptedException {
+        Supplier<Integer> job = () -> 0;
 
         ThreadPool<Integer> pool = new ThreadPool<>(5);
         LightFuture<Integer>[] tasks = new LightFuture[5];
@@ -133,21 +127,20 @@ class ThreadPoolTest {
             tasks[i] = pool.addTask(job);
         }
 
-        for (int i = 0; i < 5; i++) {
-            assertFalse(tasks[i].isReady());
-        }
-
         Field threads = pool.getClass().getDeclaredField("threads");
         threads.setAccessible(true);
 
         for (Thread thread : (Thread[]) threads.get(pool)) {
             assertFalse(thread.isInterrupted());
+            assertTrue(thread.isAlive());
         }
 
         pool.shutdown();
 
+        Thread.sleep(1000);
+
         for (Thread thread : (Thread[]) threads.get(pool)) {
-            assertTrue(thread.isInterrupted());
+            assertFalse(thread.isAlive());
         }
     }
 
