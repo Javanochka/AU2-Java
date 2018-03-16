@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.spbau.nikiforovskaya.ui.StatisticsController"
+            prefHeight="400.0" prefWidth="600.0"
+            fx:id="StatisticsPane">
+    <center>
+        <TableView fx:id="tableView" GridPane.rowIndex="0"
+                   GridPane.columnIndex="0">
+            <columns>
+                <TableColumn text="Date">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="date"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Game type">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="gameType"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="level">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="gameLevel"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="User's sign">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="whoIsTheUser"/>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Game result">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="gameResult"/>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <Button id="backFromStatistics"
+                text="back"
+                prefWidth="${StatisticsPane.width / 5}"
+                onAction="#backToMainMenu"/>
+    </bottom>
+</BorderPane>
