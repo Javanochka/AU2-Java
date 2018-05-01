@@ -9,6 +9,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -113,13 +114,20 @@ class ClientServerInteractionTest {
         Client client = new Client(hostName, portNumber, input, output);
         client.runClient();
 
-        String result = output.toString().trim();
-        assertEquals("5 lines got\n" +
-                "src/test/resources/2/yana false\n" +
-                "src/test/resources/2/2.2 true\n" +
-                "src/test/resources/2/2.2/empty false\n" +
-                "src/test/resources/2/2.1 true\n" +
-                "src/test/resources/2/2.1/lena_512.bmp false", result);
+        String[] result = output.toString().trim().split("\n");
+
+        assertEquals("5 lines got", result[0]);
+        String[] ans = new String[] {
+                "5 lines got",
+                "src/test/resources/2/yana false",
+                "src/test/resources/2/2.2 true",
+                "src/test/resources/2/2.2/empty false",
+                "src/test/resources/2/2.1 true",
+                "src/test/resources/2/2.1/lena_512.bmp false"
+        };
+        Arrays.sort(ans);
+        Arrays.sort(result);
+        assertArrayEquals(ans, result);
     }
 
     @Test
