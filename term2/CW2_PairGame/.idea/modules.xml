@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pairgame.iml" filepath="$PROJECT_DIR$/.idea/modules/pairgame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pairgame_main.iml" filepath="$PROJECT_DIR$/.idea/modules/pairgame_main.iml" group="pairgame" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pairgame_test.iml" filepath="$PROJECT_DIR$/.idea/modules/pairgame_test.iml" group="pairgame" />
+    </modules>
+  </component>
+</project>
