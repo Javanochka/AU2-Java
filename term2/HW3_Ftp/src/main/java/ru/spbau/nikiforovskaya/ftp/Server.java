@@ -10,6 +10,8 @@ import java.util.ArrayList;
 /**
  * Ftp server manager.
  * Can get queries of two types and process them.
+ * List -- provides the listing of files in the given directory, non-recursive.
+ * Get -- downloads a file from server.
  */
 public class Server {
 
@@ -126,12 +128,6 @@ public class Server {
         }
     }
 
-    /*
-    private static String getPath(DataInputStream input) throws IOException {
-        return input.readUTF();
-    }
-    */
-
     private void processListQuery(DataOutputStream output, String path) throws IOException {
         File file = new File(path);
 
@@ -157,7 +153,7 @@ public class Server {
             }
             for (File child : children) {
                 list.add(child.getPath() + " " + child.isDirectory());
-                size += 1 + getDirectoryTree(child, list);
+                size++;
             }
         }
         return size;

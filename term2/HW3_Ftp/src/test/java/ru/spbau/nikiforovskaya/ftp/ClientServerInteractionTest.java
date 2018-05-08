@@ -116,14 +116,12 @@ class ClientServerInteractionTest {
 
         String[] result = output.toString().trim().split("\n");
 
-        assertEquals("5 lines got", result[0]);
+        assertEquals("3 lines got", result[0]);
         String[] ans = new String[] {
-                "5 lines got",
+                "3 lines got",
                 "src/test/resources/2/yana false",
                 "src/test/resources/2/2.2 true",
-                "src/test/resources/2/2.2/empty false",
-                "src/test/resources/2/2.1 true",
-                "src/test/resources/2/2.1/lena_512.bmp false"
+                "src/test/resources/2/2.1 true"
         };
         Arrays.sort(ans);
         Arrays.sort(result);
