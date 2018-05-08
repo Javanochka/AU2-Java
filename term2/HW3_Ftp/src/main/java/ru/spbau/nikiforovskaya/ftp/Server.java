@@ -88,7 +88,7 @@ public class Server {
         }
     }
 
-    private void processConnection(Socket socket) throws ConnectionProtocolException {
+    private void processConnection(Socket socket) throws ConnectionProtocolException, IOException {
         try (DataInputStream input = new DataInputStream(socket.getInputStream());
              DataOutputStream output = new DataOutputStream(socket.getOutputStream())) {
             int type = input.readInt();
@@ -106,8 +106,6 @@ public class Server {
             }
 
             throw new ConnectionProtocolException();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

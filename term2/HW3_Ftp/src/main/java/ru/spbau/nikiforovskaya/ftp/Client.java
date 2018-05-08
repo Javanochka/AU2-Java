@@ -2,7 +2,6 @@ package ru.spbau.nikiforovskaya.ftp;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -32,6 +31,9 @@ public class Client {
             System.out.println("<1: Int> <path: String> -- to list all the " +
                     "files in the given path on server.");
             System.out.println("<2: Int> <path: String> -- to get the file from server.");
+        } catch (IOException e) {
+            System.out.println("Sorry, something wrong has happened while writing to or " +
+                    "reading from server");
         }
     }
 
@@ -53,8 +55,9 @@ public class Client {
      * Start client manager.
      * @throws ConnectionProtocolException if you asked client to send
      * something not in protocol.
+     * @throws IOException if something has happened while interacting with server.
      */
-    public void runClient() throws ConnectionProtocolException {
+    public void runClient() throws ConnectionProtocolException, IOException {
         while (true) {
             int type = inputUser.nextInt();
             if (type == 0) {
@@ -73,7 +76,7 @@ public class Client {
      * @param type type of operation you ask to do.
      * @param path a path to the file/directory you want to get/list.
      */
-    private void sendQuery(int type, String path) {
+    private void sendQuery(int type, String path) throws IOException {
         try (Socket socket = new Socket(hostName, port);
              DataOutputStream outputServer = new DataOutputStream(socket.getOutputStream());
              DataInputStream inputServer = new DataInputStream(socket.getInputStream())) {
@@ -86,10 +89,6 @@ public class Client {
             } else {
                 saveFile(inputServer, new File(path).getName());
             }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

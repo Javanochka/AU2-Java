@@ -63,7 +63,7 @@ class ClientServerInteractionTest {
     }
 
     @Test
-    void testListEmptyDirectory() throws ConnectionProtocolException {
+    void testListEmptyDirectory() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
                 "1 src/test/resources/Empty\n0".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -75,7 +75,7 @@ class ClientServerInteractionTest {
         assertEquals("0 lines got", result);
     }
     @Test
-    void testListOnlyFile() throws ConnectionProtocolException {
+    void testListOnlyFile() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
                 "1 src/test/resources/1\n0".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -106,7 +106,7 @@ class ClientServerInteractionTest {
     }
 
     @Test
-    void testListDirectoryWithTwoSubdirectories() throws ConnectionProtocolException {
+    void testListDirectoryWithTwoSubdirectories() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
                 "1 src/test/resources/2\n0".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
