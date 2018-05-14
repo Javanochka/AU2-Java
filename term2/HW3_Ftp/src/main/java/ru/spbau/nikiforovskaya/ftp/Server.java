@@ -91,15 +91,15 @@ public class Server {
     private void processConnection(Socket socket) throws ConnectionProtocolException, IOException {
         try (DataInputStream input = new DataInputStream(socket.getInputStream());
              DataOutputStream output = new DataOutputStream(socket.getOutputStream())) {
-            int type = input.readInt();
+            QueryType type = QueryType.fromInt(input.readInt());
             String path = input.readUTF();
 
-            if (type == 1) {
+            if (type == QueryType.LIST) {
                 processListQuery(output, path);
                 output.flush();
                 return;
             }
-            if (type == 2) {
+            if (type == QueryType.GET) {
                 processGetQuery(output, path);
                 output.flush();
                 return;
@@ -112,8 +112,13 @@ public class Server {
     private void processGetQuery(DataOutputStream output, String path) throws IOException {
         File file = new File(path);
 
-        if (!file.exists() || !file.isFile()) {
+        if (!file.exists()) {
             output.writeLong(0);
+            return;
+        }
+
+        if (file.isDirectory()) {
+            output.writeLong(-1);
             return;
         }
 

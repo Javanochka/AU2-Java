@@ -21,16 +21,22 @@ public class Client {
      * @param args args[0], args[1] should be host name and port of the server.
      */
     public static void main(String[] args) {
+        if (args.length != 2) {
+            System.out.println("Run this program with " +
+                    "host name and port number in arguments.");
+            return;
+        }
         String hostName = args[0];
         int port = Integer.parseInt(args[1]);
         try {
+            System.out.println();
             new Client(hostName, port, System.in, System.out).runClient();
         } catch (ConnectionProtocolException e) {
             System.out.println("Sorry, you typed in wrong query");
-            System.out.println("0 to exit");
-            System.out.println("<1: Int> <path: String> -- to list all the " +
+            System.out.println("\"exit\" to exit");
+            System.out.println("\"list\" <path: String> -- to list all the " +
                     "files in the given path on server.");
-            System.out.println("<2: Int> <path: String> -- to get the file from server.");
+            System.out.println("\"get\" <path: String> -- to get the file from server.");
         } catch (IOException e) {
             System.out.println("Sorry, something wrong has happened while writing to or " +
                     "reading from server");
@@ -59,11 +65,12 @@ public class Client {
      */
     public void runClient() throws ConnectionProtocolException, IOException {
         while (true) {
-            int type = inputUser.nextInt();
-            if (type == 0) {
+            String what = inputUser.next();
+            if (what.equals("exit")) {
                 return;
             }
-            if (type != 1 && type != 2) {
+            QueryType type = QueryType.fromString(what);
+            if (type == null) {
                 throw new ConnectionProtocolException();
             }
             String path = inputUser.next();
@@ -76,15 +83,15 @@ public class Client {
      * @param type type of operation you ask to do.
      * @param path a path to the file/directory you want to get/list.
      */
-    private void sendQuery(int type, String path) throws IOException {
+    private void sendQuery(QueryType type, String path) throws IOException {
         try (Socket socket = new Socket(hostName, port);
              DataOutputStream outputServer = new DataOutputStream(socket.getOutputStream());
              DataInputStream inputServer = new DataInputStream(socket.getInputStream())) {
 
-            outputServer.writeInt(type);
+            outputServer.writeInt(type.getInt());
             outputServer.writeUTF(path);
 
-            if (type == 1) {
+            if (type == QueryType.LIST) {
                 listFiles(inputServer);
             } else {
                 saveFile(inputServer, new File(path).getName());
@@ -95,6 +102,11 @@ public class Client {
     private void saveFile(DataInputStream inputServer, String name) throws IOException {
         try (OutputStream outputFile = new FileOutputStream(new File(name))) {
             long size = inputServer.readLong();
+            if (size == -1) {
+                outputUser.println("You have asked to download a directory.\n" +
+                        "This command can only download files.");
+                return;
+            }
             byte[] buffer = new byte[1024];
             int read = 0;
             while (read < size) {

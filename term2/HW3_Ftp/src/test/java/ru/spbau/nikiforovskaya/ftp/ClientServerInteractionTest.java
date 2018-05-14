@@ -65,7 +65,7 @@ class ClientServerInteractionTest {
     @Test
     void testListEmptyDirectory() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
-                "1 src/test/resources/Empty\n0".getBytes(StandardCharsets.UTF_8));
+                "list src/test/resources/Empty\nexit".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
@@ -77,7 +77,7 @@ class ClientServerInteractionTest {
     @Test
     void testListOnlyFile() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
-                "1 src/test/resources/1\n0".getBytes(StandardCharsets.UTF_8));
+                "list src/test/resources/1\nexit".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
@@ -90,7 +90,7 @@ class ClientServerInteractionTest {
     @Test
     void testGetOnlyFile() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
-                "2 src/test/resources/1/text\n0".getBytes(StandardCharsets.UTF_8));
+                "get src/test/resources/1/text\nexit".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
@@ -108,7 +108,7 @@ class ClientServerInteractionTest {
     @Test
     void testListDirectoryWithTwoSubdirectories() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
-                "1 src/test/resources/2\n0".getBytes(StandardCharsets.UTF_8));
+                "list src/test/resources/2\nexit".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
@@ -131,7 +131,7 @@ class ClientServerInteractionTest {
     @Test
     void testGetEmptyFile() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
-                "2 src/test/resources/2/2.2/empty\n0".getBytes(StandardCharsets.UTF_8));
+                "get src/test/resources/2/2.2/empty\nexit".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
@@ -147,9 +147,23 @@ class ClientServerInteractionTest {
     }
 
     @Test
+    void testGetFolder() throws ConnectionProtocolException, IOException {
+        ByteArrayInputStream input = new ByteArrayInputStream(
+                "get src/test/resources/2/2.2\nexit".getBytes(StandardCharsets.UTF_8));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        Client client = new Client(hostName, portNumber, input, output);
+        client.runClient();
+
+        String result = output.toString().trim();
+        assertEquals("You have asked to download a directory.\n" +
+                "This command can only download files.", result);
+    }
+
+    @Test
     void testGetPictureFile() throws ConnectionProtocolException, IOException {
         ByteArrayInputStream input = new ByteArrayInputStream(
-                "2 src/test/resources/2/2.1/lena_512.bmp\n0".getBytes(StandardCharsets.UTF_8));
+                "get src/test/resources/2/2.1/lena_512.bmp\nexit".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
@@ -167,6 +181,16 @@ class ClientServerInteractionTest {
     void testThrowsConnectionException() {
         ByteArrayInputStream input = new ByteArrayInputStream(
                 "3 abaca".getBytes(StandardCharsets.UTF_8));
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        Client client = new Client(hostName, portNumber, input, output);
+        assertThrows(ConnectionProtocolException.class, client::runClient);
+    }
+
+    @Test
+    void testThrowsConnectionExceptionStringType() {
+        ByteArrayInputStream input = new ByteArrayInputStream(
+                "bu abaca".getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
