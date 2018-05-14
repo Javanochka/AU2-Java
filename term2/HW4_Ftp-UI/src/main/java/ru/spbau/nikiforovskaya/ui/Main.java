@@ -24,7 +24,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/main_scene.fxml"));
-        primaryStage.setTitle("Tic-Tac-Toe");
+        primaryStage.setTitle("FTP client");
         Main.primaryStage = primaryStage;
         primaryStage.setMinHeight(240);
         primaryStage.setMinWidth(460);

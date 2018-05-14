@@ -81,7 +81,7 @@ public class MainController {
             textInfo.setText("Sorry, didn't manage to open directory.");
             System.err.println(e.getMessage());
         }
-        String[] result = output.toString().trim().split("\n");
+        String[] result = output.toString().trim().split(System.lineSeparator());
         Record[] records = makeRecordArrayFromStringArray(
                 Arrays.copyOfRange(result, 1, result.length));
         ObservableList<Record> data = tableView.getItems();
@@ -94,6 +94,8 @@ public class MainController {
 
     private void processFileDownload(String pressedName) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("."));
+        fileChooser.setInitialFileName(pressedName);
         fileChooser.setTitle("Choose where to save file");
         File file = fileChooser.showSaveDialog(Main.primaryStage);
 
