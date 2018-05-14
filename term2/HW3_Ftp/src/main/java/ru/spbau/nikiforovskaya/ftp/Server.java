@@ -21,6 +21,13 @@ public class Server {
      * @throws IOException if something happened while opening console for writing/reading.
      */
     public static void main(String[] args) throws IOException {
+
+        if (args.length != 1) {
+            System.out.println("Run this program with " +
+                    "port number on which to run server in arguments.");
+            return;
+        }
+
         int portNumber = Integer.parseInt(args[0]);
 
         Thread server = new Thread(() -> {
