@@ -27,19 +27,29 @@ public class Client {
             return;
         }
         String hostName = args[0];
-        int port = Integer.parseInt(args[1]);
+        int port;
+
         try {
-            System.out.println();
-            new Client(hostName, port, System.in, System.out).runClient();
-        } catch (ConnectionProtocolException e) {
-            System.out.println("Sorry, you typed in wrong query");
-            System.out.println("\"exit\" to exit");
-            System.out.println("\"list\" <path: String> -- to list all the " +
-                    "files in the given path on server.");
-            System.out.println("\"get\" <path: String> -- to get the file from server.");
-        } catch (IOException e) {
-            System.out.println("Sorry, something wrong has happened while writing to or " +
-                    "reading from server");
+            port = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("The second argument should be port number.");
+            return;
+        }
+
+        while (true) {
+            try {
+                new Client(hostName, port, System.in, System.out).runClient();
+                return;
+            } catch (ConnectionProtocolException e) {
+                System.out.println("Sorry, you typed in wrong query");
+                System.out.println("\"exit\" to exit");
+                System.out.println("\"list\" <path: String> -- to list all the " +
+                        "files in the given path on server.");
+                System.out.println("\"get\" <path: String> -- to get the file from server.");
+            } catch (IOException e) {
+                System.out.println("Sorry, something wrong has happened while writing to or " +
+                        "reading from server");
+            }
         }
     }
 
@@ -100,13 +110,14 @@ public class Client {
     }
 
     private void saveFile(DataInputStream inputServer, String name) throws IOException {
-        try (OutputStream outputFile = new FileOutputStream(new File(name))) {
-            long size = inputServer.readLong();
-            if (size == -1) {
-                outputUser.println("You have asked to download a directory.\n" +
-                        "This command can only download files.");
-                return;
-            }
+        long size = inputServer.readLong();
+        if (size == -1) {
+            outputUser.println("You have asked to download a directory.\n" +
+                    "This command can only download files.");
+            return;
+        }
+
+        try (OutputStream outputFile = new FileOutputStream(new File("downloaded_" + name))) {
             byte[] buffer = new byte[1024];
             int read = 0;
             while (read < size) {
@@ -117,7 +128,7 @@ public class Client {
                 outputFile.write(buffer, 0, newRead);
                 read += newRead;
             }
-            outputUser.println("Successfully saved file to " + name);
+            outputUser.println("Successfully saved file to " + "downloaded_" + name);
         }
     }
 
