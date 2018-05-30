@@ -104,7 +104,9 @@ public class Client {
             if (type == QueryType.LIST) {
                 listFiles(inputServer);
             } else {
-                saveFile(inputServer, new File(path).getName());
+                outputUser.println("Type in filename:");
+                String fileName = inputUser.next();
+                saveFile(inputServer, fileName);
             }
         }
     }
@@ -117,7 +119,7 @@ public class Client {
             return;
         }
 
-        try (OutputStream outputFile = new FileOutputStream(new File("downloaded_" + name))) {
+        try (OutputStream outputFile = new FileOutputStream(new File(name))) {
             byte[] buffer = new byte[1024];
             int read = 0;
             while (read < size) {
@@ -128,7 +130,7 @@ public class Client {
                 outputFile.write(buffer, 0, newRead);
                 read += newRead;
             }
-            outputUser.println("Successfully saved file to " + "downloaded_" + name);
+            outputUser.println("Successfully saved file to " + name);
         }
     }
 
