@@ -96,20 +96,22 @@ class ClientServerInteractionTest {
     void testGetOnlyFile() throws ConnectionProtocolException, IOException {
         Path pathToFile = Paths.get("src", "test", "resources", "1", "text");
         ByteArrayInputStream input = new ByteArrayInputStream(
-                ("get " + pathToFile.toString() + System.lineSeparator() + "exit")
+                ("get " + pathToFile.toString() + System.lineSeparator()
+                        + "text" + System.lineSeparator() + "exit")
                         .getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
         client.runClient();
 
-        String result = output.toString().trim();
-        assertEquals("Successfully saved file to downloaded_text", result);
+        String[] result = output.toString().trim().split(System.lineSeparator());
+        assertArrayEquals(new String[] {"Type in filename:",
+        "Successfully saved file to text"}, result);
         String[] res = Files.lines(
-                Paths.get("downloaded_text")).collect(Collectors.toList()).toArray(new String[0]);
+                Paths.get("text")).collect(Collectors.toList()).toArray(new String[0]);
         assertEquals(2, res.length);
         assertArrayEquals(new String[] {"meow", "meow"}, res);
-        assertTrue(new File("downloaded_text").delete());
+        assertTrue(new File("text").delete());
     }
 
     @Test
@@ -141,20 +143,22 @@ class ClientServerInteractionTest {
     void testGetEmptyFile() throws ConnectionProtocolException, IOException {
         Path pathToFile = Paths.get("src", "test", "resources", "2", "2.2", "empty");
         ByteArrayInputStream input = new ByteArrayInputStream(
-                ("get " + pathToFile.toString() + System.lineSeparator() + "exit")
+                ("get " + pathToFile.toString() + System.lineSeparator()
+                        + "empty" + System.lineSeparator() + "exit")
                         .getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
         client.runClient();
 
-        String result = output.toString().trim();
-        assertEquals("Successfully saved file to downloaded_empty", result);
+        String[] result = output.toString().trim().split(System.lineSeparator());
+        assertArrayEquals(new String[] {"Type in filename:",
+                "Successfully saved file to empty"}, result);
         String[] res = Files.lines(
-                Paths.get("downloaded_empty")).collect(Collectors.toList()).toArray(new String[0]);
+                Paths.get("empty")).collect(Collectors.toList()).toArray(new String[0]);
         assertEquals(0, res.length);
         assertArrayEquals(new String[] {}, res);
-        assertTrue(new File("downloaded_empty").delete());
+        assertTrue(new File("empty").delete());
     }
 
     @Test
@@ -162,7 +166,8 @@ class ClientServerInteractionTest {
         Path pathToFile = Paths.get("src", "test", "resources",
                 "2", "2.2");
         ByteArrayInputStream input = new ByteArrayInputStream(
-                ("get " + pathToFile + System.lineSeparator() + "exit")
+                ("get " + pathToFile + System.lineSeparator()
+                        + "meow" + System.lineSeparator() + "exit")
                         .getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -170,7 +175,8 @@ class ClientServerInteractionTest {
         client.runClient();
 
         String result = output.toString().trim();
-        assertArrayEquals(new String[] {"You have asked to download a directory.",
+        assertArrayEquals(new String[] {"Type in filename:",
+                "You have asked to download a directory.",
                 "This command can only download files."}, result.split(System.lineSeparator()));
     }
 
@@ -179,19 +185,21 @@ class ClientServerInteractionTest {
         Path pathToFile = Paths.get("src", "test", "resources",
                 "2", "2.1", "lena_512.bmp");
         ByteArrayInputStream input = new ByteArrayInputStream(
-                ("get " + pathToFile.toString() + System.lineSeparator() +"exit")
+                ("get " + pathToFile.toString() + System.lineSeparator()
+                        + "lena_512.bmp" + System.lineSeparator() + "exit")
                         .getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         Client client = new Client(hostName, portNumber, input, output);
         client.runClient();
 
-        String result = output.toString().trim();
-        assertEquals("Successfully saved file to downloaded_lena_512.bmp", result);
+        String[] result = output.toString().trim().split(System.lineSeparator());
+        assertArrayEquals(new String[] {"Type in filename:",
+                "Successfully saved file to lena_512.bmp"}, result);
         byte[] b1 = Files.readAllBytes(pathToFile);
-        byte[] b2 = Files.readAllBytes(Paths.get("downloaded_lena_512.bmp"));
+        byte[] b2 = Files.readAllBytes(Paths.get("lena_512.bmp"));
         assertArrayEquals(b1, b2);
-        assertTrue(new File("downloaded_lena_512.bmp").delete());
+        assertTrue(new File("lena_512.bmp").delete());
     }
 
     @Test
