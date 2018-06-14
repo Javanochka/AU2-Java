@@ -23,8 +23,14 @@ public class ThreadPoolServer extends Server {
     public void run() {
         ExecutorService threadPool = Executors.newFixedThreadPool(3);
         try (ServerSocket listener = new ServerSocket(port)) {
+            listener.setSoTimeout(5000);
             while (!Thread.interrupted()) {
-                Socket socket = listener.accept();
+                Socket socket;
+                try {
+                    socket = listener.accept();
+                } catch (Exception e) {
+                    continue;
+                }
                 ExecutorService answerSender = Executors.newSingleThreadExecutor();
                 Thread talker = new Thread(() -> processConnection(socket, threadPool, answerSender));
                 talker.start();
@@ -62,6 +68,11 @@ public class ThreadPoolServer extends Server {
                     });
                 });
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

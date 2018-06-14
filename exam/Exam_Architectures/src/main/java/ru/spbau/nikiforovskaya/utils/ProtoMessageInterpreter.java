@@ -29,6 +29,22 @@ public final class ProtoMessageInterpreter {
         return ProtoMessage.Settings.parseFrom(buffer);
     }
 
+    public static void writeSettingsMessage(DataOutputStream out,
+                                       ProtoMessage.Settings.ServerType type, int port) throws IOException {
+        byte[] toSend = ProtoMessage.Settings.newBuilder()
+                .setType(type).setPort(port)
+                .build().toByteArray();
+        out.writeInt(toSend.length);
+        out.write(toSend);
+        out.flush();
+    }
+
+    public static ProtoMessage.Timing readTimingMessage(DataInputStream in, int size) throws IOException {
+        byte[] buffer = new byte[size];
+        in.read(buffer, 0, buffer.length);
+        return ProtoMessage.Timing.parseFrom(buffer);
+    }
+
     public static void writeTimingMessage(DataOutputStream out, int timeToSort,
                                           int timeToProcess) throws IOException {
         byte[] toSend = ProtoMessage.Timing.newBuilder()

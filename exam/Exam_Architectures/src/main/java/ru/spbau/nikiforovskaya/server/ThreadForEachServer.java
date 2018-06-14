@@ -21,6 +21,7 @@ public class ThreadForEachServer extends Server {
     @Override
     public void run() {
         try (ServerSocket listener = new ServerSocket(port)) {
+            listener.setSoTimeout(5000);
             while (!Thread.interrupted()) {
                 Socket socket = listener.accept();
                 Thread talker = new Thread(() -> processConnection(socket));

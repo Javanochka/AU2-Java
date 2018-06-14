@@ -9,6 +9,8 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.text.Text?>
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ru.spbau.nikiforovskaya.ui.MainController"
@@ -17,9 +19,9 @@
         <VBox spacing="10">
             <HBox>
                 <Text text="ServerManager ip " wrappingWidth="130"/>
-                <TextField fx:id="ipInput" prefWidth="50"/>
+                <TextField fx:id="ipInput" prefWidth="100"/>
                 <Text text="port " wrappingWidth="70" textAlignment="CENTER"/>
-                <TextField fx:id="portInput" prefWidth="50"/>
+                <TextField fx:id="portInput" prefWidth="100"/>
             </HBox>
             <HBox>
                 <Text text="Choose architecture type: " wrappingWidth="250"/>
@@ -42,8 +44,8 @@
                 <ComboBox fx:id="parameterComboBox" onAction="#itemSelected" prefWidth="100">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="elements" />
                             <String fx:value="clients" />
+                            <String fx:value="elements" />
                             <String fx:value="delta" />
                         </FXCollections>
                     </items>
@@ -63,6 +65,14 @@
             <HBox fx:id="secondChanging">
 
             </HBox>
+            <LineChart fx:id="chart">
+                <xAxis>
+                    <NumberAxis fx:id="xAxis"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Time (ms)" side="LEFT"/>
+                </yAxis>
+            </LineChart>
         </VBox>
     <!--    <GridPane hgap="10" vgap="10">
             <Text text="Number of elements"
@@ -84,6 +94,7 @@
         </GridPane> -->
     </center>
     <bottom>
+        <Button text="Count statistics" onAction="#countStatistics" alignment="BASELINE_RIGHT"/>
        <!-- <HBox>
             <Text fx:id="textInfo" text="Double click to download file or to enter folder">
             </Text>
