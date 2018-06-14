@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/architecture_compare.iml" filepath="$PROJECT_DIR$/.idea/modules/architecture_compare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/architecture_compare_main.iml" filepath="$PROJECT_DIR$/.idea/modules/architecture_compare_main.iml" group="architecture_compare" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/architecture_compare_test.iml" filepath="$PROJECT_DIR$/.idea/modules/architecture_compare_test.iml" group="architecture_compare" />
+    </modules>
+  </component>
+</project>
