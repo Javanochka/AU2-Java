@@ -41,12 +41,15 @@ public class ServerManager {
 
                 Thread server = new Thread(serverToRun::run);
                 server.start();
+                Thread.sleep(100);
                 output.writeInt(0);
                 input.readInt();
                 while (server.isAlive()) {
                     server.interrupt();
                 }
 
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             System.out.println("Continue working? Only y for yes");
             String ans = in.next();
@@ -54,6 +57,7 @@ public class ServerManager {
                 break;
             }
         }
+        in.close();
         serverManager.close();
     }
 }

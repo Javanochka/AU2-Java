@@ -14,6 +14,10 @@ public final class ProtoMessageInterpreter {
         return ProtoMessage.Array.parseFrom(buffer);
     }
 
+    public static ProtoMessage.Array readArrayMessage(byte[] data) throws IOException {
+        return ProtoMessage.Array.parseFrom(data);
+    }
+
     public static void writeArrayMessage(DataOutputStream out, int[] array) throws IOException {
         byte[] toSend = ProtoMessage.Array.newBuilder()
                 .addAllData(Ints.asList(array))
@@ -53,5 +57,17 @@ public final class ProtoMessageInterpreter {
         out.writeInt(toSend.length);
         out.write(toSend);
         out.flush();
+    }
+
+    public static byte[] getBytesFromArrayMessage(int[] array) {
+        return ProtoMessage.Array.newBuilder()
+                .addAllData(Ints.asList(array))
+                .build().toByteArray();
+    }
+
+    public static byte[] getBytesFromTimingMessage(int timeToSort, int timeToProcess) {
+        return ProtoMessage.Timing.newBuilder()
+                .setProcessingTime(timeToProcess)
+                .setQueryTime(timeToSort).build().toByteArray();
     }
 }

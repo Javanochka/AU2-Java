@@ -4,11 +4,11 @@ import javafx.util.Pair;
 import ru.spbau.nikiforovskaya.utils.ProtoMessage;
 import ru.spbau.nikiforovskaya.utils.ProtoMessageInterpreter;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClientManager {
@@ -85,8 +85,31 @@ public class ClientManager {
                 }
                 output.writeInt(0);
             }
+            printOneMetric(clientTimeList, "time_on_client");
+            printOneMetric(processTimeList, "time_processing");
+            printOneMetric(sortTimeList, "time_sorting");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    protected void printOneMetric(List<Pair<Integer, Integer>> values, String metricName) throws
+            FileNotFoundException {
+        String[] order = new String[] {
+                "clients", "elements", "pause"
+        };
+        File file = new File(Paths.get("logs",type.toString() + "_" +
+                metricName + "_" + whoChanges + ".txt").toString());
+        try (PrintWriter out = new PrintWriter(file)) {
+            out.println("Queries: " + numberOfQueries);
+            out.println("Clients: " + startValues[0]);
+            out.println("Elements: " + startValues[1]);
+            out.println("Pause: " + startValues[2]);
+            out.println("Changed parameter: " + order[whoChanges]);
+            out.println("Statistics: (<parameter> <result>)");
+            for (Pair<Integer, Integer> p : values) {
+                out.println(p.getKey() + " " + p.getValue());
+            }
         }
     }
 
