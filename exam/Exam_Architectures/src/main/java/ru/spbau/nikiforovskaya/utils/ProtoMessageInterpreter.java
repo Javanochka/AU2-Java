@@ -10,7 +10,7 @@ public final class ProtoMessageInterpreter {
 
     public static ProtoMessage.Array readArrayMessage(DataInputStream in, int size) throws IOException {
         byte[] buffer = new byte[size];
-        in.read(buffer, 0, buffer.length);
+        in.readFully(buffer, 0, buffer.length);
         return ProtoMessage.Array.parseFrom(buffer);
     }
 
@@ -29,7 +29,7 @@ public final class ProtoMessageInterpreter {
 
     public static ProtoMessage.Settings readSettingsMessage(DataInputStream in, int size) throws IOException {
         byte[] buffer = new byte[size];
-        in.read(buffer, 0, buffer.length);
+        in.readFully(buffer, 0, buffer.length);
         return ProtoMessage.Settings.parseFrom(buffer);
     }
 
@@ -45,7 +45,7 @@ public final class ProtoMessageInterpreter {
 
     public static ProtoMessage.Timing readTimingMessage(DataInputStream in, int size) throws IOException {
         byte[] buffer = new byte[size];
-        in.read(buffer, 0, buffer.length);
+        in.readFully(buffer, 0, buffer.length);
         return ProtoMessage.Timing.parseFrom(buffer);
     }
 

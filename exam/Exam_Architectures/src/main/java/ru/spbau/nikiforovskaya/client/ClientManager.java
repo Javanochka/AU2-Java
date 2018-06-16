@@ -96,7 +96,7 @@ public class ClientManager {
     protected void printOneMetric(List<Pair<Integer, Integer>> values, String metricName) throws
             FileNotFoundException {
         String[] order = new String[] {
-                "clients", "elements", "pause"
+                "clients", "elements", "delta"
         };
         File file = new File(Paths.get("logs",type.toString() + "_" +
                 metricName + "_" + whoChanges + ".txt").toString());
@@ -104,7 +104,7 @@ public class ClientManager {
             out.println("Queries: " + numberOfQueries);
             out.println("Clients: " + startValues[0]);
             out.println("Elements: " + startValues[1]);
-            out.println("Pause: " + startValues[2]);
+            out.println("Delta: " + startValues[2]);
             out.println("Changed parameter: " + order[whoChanges]);
             out.println("Statistics: (<parameter> <result>)");
             for (Pair<Integer, Integer> p : values) {
@@ -117,6 +117,7 @@ public class ClientManager {
 
     private void stepOverClients() {
         for (int nClients = startValues[0]; nClients < finalValue; nClients += step) {
+            System.err.println(nClients);
             int[] result = runNClients(nClients, numberOfQueries, startValues[1], startValues[2]);
             clientTimeList.add(new Pair<>(nClients, result[0]));
             sortTimeList.add(new Pair<>(nClients, result[1]));

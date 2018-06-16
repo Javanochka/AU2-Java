@@ -23,9 +23,13 @@ public class ThreadForEachServer extends Server {
         try (ServerSocket listener = new ServerSocket(port)) {
             listener.setSoTimeout(5000);
             while (!Thread.interrupted()) {
-                Socket socket = listener.accept();
-                Thread talker = new Thread(() -> processConnection(socket));
-                talker.start();
+                try {
+                    Socket socket = listener.accept();
+                    Thread talker = new Thread(() -> processConnection(socket));
+                    talker.start();
+                } catch (Exception ignored) {
+                    continue;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
