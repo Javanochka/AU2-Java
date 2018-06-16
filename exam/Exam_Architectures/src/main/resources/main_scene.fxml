@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.text.Text?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.spbau.nikiforovskaya.ui.MainController"
+            prefHeight="400.0" prefWidth="600.0">
+    <center>
+        <VBox spacing="10">
+            <HBox>
+                <Text text="ServerManager ip " wrappingWidth="130"/>
+                <TextField fx:id="ipInput" prefWidth="100"/>
+                <Text text="port " wrappingWidth="70" textAlignment="CENTER"/>
+                <TextField fx:id="portInput" prefWidth="100"/>
+            </HBox>
+            <HBox>
+                <Text text="Choose architecture type: " wrappingWidth="250"/>
+                <ComboBox fx:id="architectureComboBox" prefWidth="100">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Thread for each" />
+                            <String fx:value="Thread pool" />
+                            <String fx:value="Nonblocking" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+            <HBox>
+                <Text text="Number of queries from each: " wrappingWidth="250"/>
+                <TextField fx:id="numberOfQueriesInput" prefWidth="100"/>
+            </HBox>
+            <HBox>
+                <Text text="Choose changing parameter: " wrappingWidth="250"/>
+                <ComboBox fx:id="parameterComboBox" onAction="#itemSelected" prefWidth="100">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="clients" />
+                            <String fx:value="elements" />
+                            <String fx:value="delta" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+            <HBox>
+                <Text text="Changes from " wrappingWidth="130"/>
+                <TextField fx:id="changesFrom" prefWidth="70"/>
+                <Text text="to" wrappingWidth="30" textAlignment="CENTER"/>
+                <TextField fx:id="changesTo" prefWidth="70"/>
+                <Text text="with step" wrappingWidth="70" textAlignment="CENTER"/>
+                <TextField fx:id="changesStep" prefWidth="70"/>
+            </HBox>
+            <HBox fx:id="firstChanging">
+
+            </HBox>
+            <HBox fx:id="secondChanging">
+
+            </HBox>
+            <LineChart fx:id="chart">
+                <xAxis>
+                    <NumberAxis fx:id="xAxis"/>
+                </xAxis>
+                <yAxis>
+                    <NumberAxis fx:id="yAxis" label="Time (ms)" side="LEFT"/>
+                </yAxis>
+            </LineChart>
+        </VBox>
+    <!--    <GridPane hgap="10" vgap="10">
+            <Text text="Number of elements"
+                  GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="numberOfElementsInput"
+                       GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Text text="Number of clients"
+                  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <TextField fx:id="numberOfClientsInput"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+            <Text text="Time between queries"
+                  GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <TextField fx:id="deltaInput"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            <Text text="Number of queries from each client"
+                  GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <TextField fx:id="numberOfQueriesFromClientInput"
+                       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        </GridPane> -->
+    </center>
+    <bottom>
+        <Button text="Count statistics" onAction="#countStatistics" alignment="BASELINE_RIGHT"/>
+       <!-- <HBox>
+            <Text fx:id="textInfo" text="Double click to download file or to enter folder">
+            </Text>
+        </HBox> -->
+    </bottom>
+</BorderPane>

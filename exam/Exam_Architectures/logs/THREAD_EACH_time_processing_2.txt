@@ -1,0 +1,16 @@
+Queries: 10
+Clients: 10
+Elements: 1000
+Delta: 0
+Changed parameter: delta
+Statistics: (<parameter> <result>)
+0 2709
+100 141
+200 518
+300 345
+400 424
+500 529
+600 1511
+700 1270
+800 1209
+900 1626
